@@ -35,5 +35,44 @@ gcloud storage buckets create gs:\\amirnabaei_bucket_testcase_only
 * Upload a file into cloud shell using dots and run below
 ```
 gcloud storage cp jobs.pdf  gs://amirnabaei_bucket_testcase_only
+gcloud compute regions list //list availbale regions
+INFRACLASS_REGION=us-west3 //create global variable
+echo $INFRACLASS_REGION
 ```
+#### Append the environment variable to a .profile
+
+* To create a persistent state in Cloud Shell, .profile needs to update
+```
+mkdir infraclass
+touch infraclass/config
+echo INFRACLASS_REGION=$INFRACLASS_REGION >> ~/infraclass/config //Append the value of your Region environment variable to the config file:
+
+INFRACLASS_PROJECT_ID=[YOUR_PROJECT_ID]
+echo INFRACLASS_PROJECT_ID=$INFRACLASS_PROJECT_ID >> ~/infraclass/config 
+
+source infraclass/config
+echo $INFRACLASS_PROJECT_ID
+
+//Edit the shell profile
+vi .profile
+source infraclass/config
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

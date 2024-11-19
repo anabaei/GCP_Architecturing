@@ -101,7 +101,61 @@ The default quota for each project is 15 networks.
 * `Default`: Every project is provided with a default VPC network with preset subnets and firewall rules. a subnet is allocated for each region with non-overlapping CIDR blocks and firewall rules that allow ingress traffic for ICMP, RDP, and SSH traffic from anywhere, as well as ingress traffic from within the default network for all protocols and ports.
 *  `auto mode network`: one subnet from each region is automatically created within it. These automatically created subnets use a set of predefined IP ranges with a /20 mask that can be expanded to /16. All of these subnets fit within the 10.128.0.0/9 CIDR block.
 *  `custom mode network` does not automatically create subnets. complete control over its subnets and IP ranges. decide which subnets to create, in regions you choose.
-*  custom mode networks cannot be changed to auto mode 
+*  custom mode networks cannot be changed to auto mode
+
+### Same Network vs Same Region
+
+* If two VM have same network they can comunicate withing their internal ip ranges even if they are in different regions
+* On the other hand, being in same region but different network they need their `external ip` address to comunicate. It is not touching public internet but it needs to go to `Google Edge Router`
+
+### VPC 
+* So VPC can globally comunicate internally. So when connect your machine (on premise) to VPC using VPN, then you can use VPC to comunicate withing VMs, this helps to reduce costs and compelexity
+
+### Subnets
+* Every subnet has four reserve ip address, first, second and last one. Subnets can be crossed zones in same region. So VM can be on the one subnet but different zones. For example 10.0.0.2 to VM1 at Zone1 and 10.0.0.3 at Zone2 on VM2. Both are in one region. -> Advantage-> Single firewall rule can be used for both VMs.
+* Subnet masks should not have overlap with othr subnets in any region in same VPC
+* Auto mode subnets ip range are between /20 to /16 but not larger than 16
+* Avoid makeing large ip range subnets
+
+### 10.0.0.0/29 how many instance?
+* Above can have only 4 instance in subnet, `the 5th one get subnet` exhasted error
+* 32-29 = 3 -> 2Power 3 = 8, 4 already reserverd and 4 free
+* 10.0.0.0/20 -> 4096 subnets -> physical limitation may exist you can't really use all 4000 of them
+* 10.0.0.0/23 -> 512 subnets
+* 10.0.0.0/16 = 10.0.0.0 - 10.2.0.0
+
+### Internal Ip Address vs External
+
+* Every VM and every service gets internal IP address like app engines k8
+* There is internal DNS service scope to netwrok VM name + ip address, but can't from VM different network
+* External Ip is optional. Can be assigned from pool ephemal.
+* VM doesn't know external it is map to internal
+
+### DNS Zone 
+* Google has DNS zonal and global, but suggested zonal DNS
+FQDN is
+```
+[hostname].[zone].c.[project-id].internal
+```
+* Cloud DNS translate Domain names into ip addresses
+* Map External to internal If you run  `sudo /sbin/ifconfig` you get internal ip address 
+
+### Firewall
+* Firewall exist between instances even in the same VPC.
+* Firewall rules are stateful. If connection is allowes meaned all trafic in either direction is allowed
+* If firewall rules deleted default is deny all ingress and allow all egress trafic
+* Fire wall rules includes
+* Direction: inbound and outbound (ingress and egress)
+* Source: ( source or destination)
+* Protocol and ports
+* Action: Allow or Deny
+* Priority: priority of the rule
+* Rule Assignment: Default assign all rules to all instances but we can assign certain rules to certain instances
+* GCP pricing calculator https://cloud.google.com/products/calculator
+* mynetwork-allow-icmp allows to ping networks internally and externally `ping -c 3 ipaddress` 
+
+
+
 </details>
 
 

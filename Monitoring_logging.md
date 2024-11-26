@@ -41,6 +41,19 @@ Sample error metrics include wrong answers or incorrect content, number of 400/5
 
 ### Monitoring Architecture
 
+* Typical Monitoring system is like below
+* A `data collection` layer collects metrics, logs, and traces from cloud-based systems.
+* A `data storage` layer stores the collected data and routes to the configured visualization and analysis layer.In Cloud Monitoring, this layer includes the Cloud Monitoring API that helps triage the metrics collected to be stored for further analysis
+* A data analysis and visualization layer: This layer analyzes the collected data to identify problems and trends and presents the analyzed data in a way that is easy to understand.
+  
+<img width="1434" alt="Screenshot 2024-11-25 at 12 40 22 PM" src="https://github.com/user-attachments/assets/376a1583-198d-4408-941f-77f691a04318">
+
+* For GKE, because prometheus is needed, google create a tool call GMP is a part of Cloud Monitoring and it makes GKE cluster and workload metrics available as Prometheus data.
+* it's possible for one metrics scope to monitor multiple projects, and also a project can be monitored from only a single metrics scope
+
+
+#### To create vm and install nginx
+* https://www.cloudskillsboost.google/paths/20/course_templates/99/labs/432493
 
 
 ### Error Reporting
@@ -54,10 +67,33 @@ Sample error metrics include wrong answers or incorrect content, number of 400/5
 * Users have reported that an application occasionally returns garbage data instead of the intended results, but you have been unable to reproduce this problem in your test environment. Which tool might be of best help? Error Reporting
 * You want a simple way to see the latency of requests for a web application you deployed to Cloud Run. What Google Cloud tool should you use? Trace
 * You want to calculate the uptime of a service and receive alerts if the uptime value falls below a certain threshold. Which tool will help you with this requirement? Cloud Monitoring
-* 
+* The notification channels were enhanced to accept this data—including Email, Webhooks, Cloud Pub/Sub, and PagerDuty.
+* High-priority alerts might go to Slack, SMS, and/or maybe even a third-party solution like PagerDuty.
+* Low-priority alerts might be logged, sent through email, or inserted into a support ticket management system.
 
 
+### Alert
+* Alert policy can be created from CLI, API and terraform
+* Alerting API and gcloud CLI can retrieve, delete and create alerting policies
+* There are two types of Alerting policies: Metrics and Log based policies
 
+#### Metrics
+* Use metric data
+* A classic example of metrics based alerting policy is notify when application running on VM has high latency.
+
+#### Log Based
+* Notigy any time specific message occurs in log.
+* Add log Based policy by using the log explorer in cloud logging/monitoring
+* Wnen a human user access security key of a service account
+
+* Use the documentation section to guide your troubleshooting.
+* Include internal playbooks, landing links and dynamic labels The default alert contains information about which alert is failing and why, so think of this more like an easy button.
+* Email alert simple
+
+<img width="1166" alt="Screenshot 2024-11-26 at 9 05 44 AM" src="https://github.com/user-attachments/assets/d4651eed-c4ec-4c00-8abf-bb140e6e0319">
+
+* `Incident` When alert policies are created, web interface provide summary. An event occurs when conditions of policies are met and cloud monitoring opens an incident.
+* `Resource groups` , groups can contain subgroups until 6 level deep. 
 
 
 
